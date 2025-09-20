@@ -1,0 +1,25 @@
+https://www.youtube.com/watch?v=fw5ObX8P6as
+安裝 laragon
+安裝 Beekeeper studio (database viewer)
+
+把 PHP 例如 (C:\laragon\bin\php\php-8.4.5-nts-Win32-vs17-x64) 加到 path
+
+# local server
+入口檔要叫 index.php 才會自動抓
+php -S localhost:8080 跑內建 server
+或是把專案放到 C:\laragon\www 底下，然後 localhost/[資料夾名] 就可以開了
+
+
+# PHP
+php code 結尾必須有 ';'，例如 echo "123";
+'+' 字串要用 '.'，例如 echo "1" . "2" . "3"
+變數用 $ 定義，例如 $name = "dodo"
+template string 外面要用""包，不能用''，例如 echo "Hi, $name"; ，echo 'Hi, $name'; 這樣會變純字串
+<?php echo $message; ?> 等於 <?= $message; ?>
+
+變數後面要加字的時候，可以用 {} 把變數包起來，例如 $book 後面要馬上接 ™，但是寫 $book™ 會錯誤
+```php
+<?php foreach ($books as $book) {
+    echo "<li>{$book}™</li>;
+} ?>
+```
