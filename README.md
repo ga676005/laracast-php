@@ -38,6 +38,7 @@ template string 外面要用雙引號""包，不能用單引號''，例如 `echo
 在 `index.php` 檔案最底下寫 `require "index.view.php";`，這樣 `index.view.php` 就能用 `index.php` 的變數  
 連結要加 .php 寫 `/about.php` 不能寫 `/about`
 連結要寫相對路徑 `./about.php`，相對的路徑是 `.php` 而不是 `.view.php`
+做 router 的話則不用寫 `.php`
 
 controller takes requests and reponds
 

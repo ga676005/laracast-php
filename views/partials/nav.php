@@ -1,8 +1,29 @@
 <?php
-// Function to get the current page name
+// Function to get the current page from the URI
 function getCurrentPage() {
-    $currentFile = basename($_SERVER['PHP_SELF']);
-    return pathinfo($currentFile, PATHINFO_FILENAME);
+    // Get the request URI and strip project directory 
+    $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
+    
+    // Remove project directory (same logic as router)
+    $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+    $projectDir = $scriptDir === '/' ? '' : $scriptDir;
+    
+    if ($projectDir && str_starts_with($uri, $projectDir)) {
+        $uri = substr($uri, strlen($projectDir));
+    }
+    
+    // Convert URI to page name
+    switch ($uri) {
+        case '/':
+        case '/home':
+            return 'index';
+        case '/about':
+            return 'about';
+        case '/contact':
+            return 'contact';
+        default:
+            return '';
+    }
 }
 
 // Function to check if a page is active
@@ -31,9 +52,9 @@ function getNavClasses($pageName) {
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="./index.php" <?= isActivePage('index') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('index') ?>">Home</a>
-                        <a href="./about.php" <?= isActivePage('about') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('about') ?>">About</a>
-                        <a href="./contact.php" <?= isActivePage('contact') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('contact') ?>">Contact</a>
+                        <a href="<?= Router::url('/') ?>" <?= isActivePage('index') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('index') ?>">Home</a>
+                        <a href="<?= Router::url('/about') ?>" <?= isActivePage('about') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('about') ?>">About</a>
+                        <a href="<?= Router::url('/contact') ?>" <?= isActivePage('contact') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('contact') ?>">Contact</a>
                     </div>
                 </div>
             </div>
@@ -81,9 +102,9 @@ function getNavClasses($pageName) {
 
     <el-disclosure id="mobile-menu" hidden class="block md:hidden">
         <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-            <a href="./index.php" <?= isActivePage('index') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('index') ?>">Home</a>
-            <a href="./about.php" <?= isActivePage('about') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('about') ?>">About</a>
-            <a href="./contact.php" <?= isActivePage('contact') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('contact') ?>">Contact</a>
+            <a href="<?= Router::url('/') ?>" <?= isActivePage('index') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('index') ?>">Home</a>
+            <a href="<?= Router::url('/about') ?>" <?= isActivePage('about') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('about') ?>">About</a>
+            <a href="<?= Router::url('/contact') ?>" <?= isActivePage('contact') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('contact') ?>">Contact</a>
         </div>
         <div class="border-t border-white/10 pt-4 pb-3">
             <div class="flex items-center px-5">
