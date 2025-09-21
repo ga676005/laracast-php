@@ -13,6 +13,7 @@ https://www.youtube.com/watch?v=fw5ObX8P6as
 
 
 # PHP
+純 PHP 檔(沒有 html)，開頭也要有 <?php，但可以不用寫 ?>  
 php code 結尾必須有 ';'，例如 `echo "123";`  
 '+' 字串要用 '.'，例如 `echo "1" . "2" . "3"`  
 變數用 $ 定義，例如 `$name = "dodo"`  
@@ -32,3 +33,6 @@ template string 外面要用雙引號""包，不能用單引號''，例如 `echo
     <li><?= $book ?></li>
 <?php endforeach; ?>
 ```
+
+## Template (View)
+在 `index.php` 檔案最底下寫 `require "index.view.php";`，這樣 `index.view.php` 就能用 `index.php` 的變數  
