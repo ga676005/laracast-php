@@ -51,3 +51,11 @@ function dd($value) {
     die() // 後面的東西就不會顯示
 }
 ```
+
+如果 .php 檔裡只有一個 class，通常檔名會用大寫開頭例如 Database.php  
+
+
+!!! 永遠不要用 user data 串 query string，例如 query("SELECT * FROM posts WHERE id = $id")  
+要用 ? 當 placeholder 然後傳參數 query("SELECT * FROM posts WHERE id = ?", [$id])  
+或是 ':' 加參數名，例如 query("SELECT * FROM posts WHERE id = :id", [':id' => $id]);  
+associative array 裡的參數名可加可不加 ':'
