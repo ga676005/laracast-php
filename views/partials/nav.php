@@ -54,6 +54,7 @@ function getNavClasses($pageName) {
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="<?= Router::url('/') ?>" <?= isActivePage('index') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('index') ?>">Home</a>
                         <a href="<?= Router::url('/about') ?>" <?= isActivePage('about') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('about') ?>">About</a>
+                        <a href="<?= Router::url('/notes') ?>" <?= isActivePage('notes') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('notes') ?>">Notes</a>
                         <a href="<?= Router::url('/contact') ?>" <?= isActivePage('contact') ? 'aria-current="page"' : '' ?> class="<?= getNavClasses('contact') ?>">Contact</a>
                     </div>
                 </div>
@@ -104,6 +105,7 @@ function getNavClasses($pageName) {
         <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
             <a href="<?= Router::url('/') ?>" <?= isActivePage('index') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('index') ?>">Home</a>
             <a href="<?= Router::url('/about') ?>" <?= isActivePage('about') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('about') ?>">About</a>
+            <a href="<?= Router::url('/notes') ?>" <?= isActivePage('notes') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('notes') ?>">Notes</a>
             <a href="<?= Router::url('/contact') ?>" <?= isActivePage('contact') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('contact') ?>">Contact</a>
         </div>
         <div class="border-t border-white/10 pt-4 pb-3">

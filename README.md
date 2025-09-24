@@ -59,3 +59,9 @@ function dd($value) {
 要用 ? 當 placeholder 然後傳參數 query("SELECT * FROM posts WHERE id = ?", [$id])  
 或是 ':' 加參數名，例如 query("SELECT * FROM posts WHERE id = :id", [':id' => $id]);  
 associative array 裡的參數名可加可不加 ':'
+
+
+打包成 zip 上傳到 eb
+```bash
+TIMESTAMP=$(date +%Y%m%d-%H%M%S) && 7z a -tzip "archive_$TIMESTAMP.zip" . -x\!.git
+```

@@ -11,20 +11,30 @@ class Router {
         // Get the directory name from the script path
         $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
         
-        // Remove leading slash from path if present
+        // If the script is in the root directory, the base path is empty
+        $basePath = ($scriptDir === '/' || $scriptDir === '\\') ? '' : $scriptDir;
+        
+        // Remove leading slash from path to avoid double slashes
         $path = ltrim($path, '/');
         
         // Combine base path with the provided path
-        return rtrim($scriptDir . '/' . $path, '/');
+        $url = rtrim($basePath . '/' . $path, '/');
+
+        // If the URL is empty (which happens for the root), default to '/'
+        return $url === '' ? '/' : $url;
     }
     
     public function resolve() {
         $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
         
-        // Remove the project directory from the URI
+        // Remove the project directory from the URI if not in root
         $projectDir = dirname($_SERVER['SCRIPT_NAME']);
-        if (str_starts_with($uri, $projectDir)) {
+        if ($projectDir !== '/' && $projectDir !== '\\' && str_starts_with($uri, $projectDir)) {
             $uri = substr($uri, strlen($projectDir));
+        }
+
+        if ($uri === '' || $uri[0] !== '/') {
+            $uri = '/' . $uri;
         }
         
         // Remove .php extension if present for routing
@@ -34,10 +44,10 @@ class Router {
         }
         
         if (array_key_exists($routeKey, $this->routes)) {
-            require $this->routes[$routeKey];
+            require BASE_PATH . $this->routes[$routeKey];
         } else {
             http_response_code(404);
-            require 'views/404.view.php';
+            require BASE_PATH . 'views/404.view.php';
         }
     }
 }

@@ -1,4 +1,4 @@
 <?php 
 $banner_title = 'Contact';
 
-require "views/contact.view.php";
+require BASE_PATH . "views/contact.view.php";

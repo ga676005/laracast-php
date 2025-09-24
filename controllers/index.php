@@ -1,4 +1,4 @@
 <?php 
 $banner_title = 'Home';
 
-require "views/index.view.php";
+require BASE_PATH . "views/index.view.php";

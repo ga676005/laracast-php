@@ -1,7 +1,7 @@
 <?php 
-require('partials/header.php'); 
-require('partials/nav.php'); 
-require('partials/banner.php'); 
+require(BASE_PATH . 'views/partials/header.php'); 
+require(BASE_PATH . 'views/partials/nav.php'); 
+require(BASE_PATH . 'views/partials/banner.php'); 
 ?>
 
 
@@ -12,4 +12,4 @@ require('partials/banner.php');
 </main>
 
 
-<?php require('partials/footer.php'); ?>
+<?php require(BASE_PATH . 'views/partials/footer.php'); ?>
