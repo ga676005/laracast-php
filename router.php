@@ -2,10 +2,22 @@
 
 class Router {
     private $routes = [];
-    
+
     public function get($uri, $controller) {
         $this->routes[$uri] = $controller;
     }
+    
+    public static function push($uri) {
+        // Ensure the URI starts with a slash
+        if (!str_starts_with($uri, '/')) {
+            $uri = '/' . $uri;
+        }
+        
+        // Redirect to the specified URI (like an <a> tag)
+        header('Location: ' . self::url($uri));
+        exit;
+    }
+    
     
     public static function url($path = '') {
         // Get the directory name from the script path
@@ -24,8 +36,18 @@ class Router {
         return $url === '' ? '/' : $url;
     }
     
-    public function resolve() {
-        $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
+    public function resolve($uri = null) {
+        if (is_numeric($uri) && file_exists(BASE_PATH . 'views/' . $uri . '.view.php')) {
+            // Check if the route is a status code and corresponding view file exists
+            http_response_code($uri);
+            require BASE_PATH . 'views/' . $uri . '.view.php';
+            exit; // Status codes should stop execution
+        }
+
+
+        if ($uri === null) {
+            $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
+        }
         
         // Remove the project directory from the URI if not in root
         $projectDir = dirname($_SERVER['SCRIPT_NAME']);
@@ -42,6 +64,9 @@ class Router {
         if (str_ends_with($uri, '.php')) {
             $routeKey = substr($uri, 0, -4);
         }
+        
+        // Make router available to all included files
+        $router = $this;
         
         if (array_key_exists($routeKey, $this->routes)) {
             require BASE_PATH . $this->routes[$routeKey];

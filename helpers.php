@@ -11,3 +11,10 @@ function dd($value) {
     die();
 }
 
+function isAuthorized($condition, $statusCode = Response::FORBIDDEN) {
+    if (!$condition) {
+        Router::push($statusCode);
+        exit;
+    }
+}
+
