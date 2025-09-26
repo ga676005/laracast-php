@@ -14,11 +14,15 @@ require(BASE_PATH . 'views/partials/banner.php');
                         href="<?= Router::url('/note?id=' . $note['note_id']) ?>" 
                         class="text-blue-600 hover:text-blue-800 underline transition-colors duration-200"
                     >
-                        <?= $note['body'] ?>
+                        <?= htmlspecialchars($note['body']) ?>
                     </a>
                 </li>
             <?php endforeach; ?>
         </ul>
+
+        <p class="mt-4">
+            <a href="<?= Router::url('/notes/create') ?>" class="text-blue-600 hover:text-blue-800 underline transition-colors duration-200">Create Note</a>
+        </p>
     </div>
 </main>
 
