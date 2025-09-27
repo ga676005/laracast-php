@@ -1,11 +1,7 @@
 <?php 
-require 'Response.php';
-require 'Validator.php';
-
 $banner_title = 'Create Note';
 
 $config = require 'config.php';
-require 'Database.php';
 $db = new Database($config['database'], 'root', '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

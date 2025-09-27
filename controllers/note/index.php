@@ -2,7 +2,6 @@
 $banner_title = 'Notes';
 
 $config = require 'config.php';
-require 'Database.php';
 $db = new Database($config['database'], 'root', '');
 
 $notes = $db->query("SELECT * FROM notes WHERE user_id = 1")->fetchAll();
