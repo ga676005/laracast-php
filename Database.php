@@ -15,4 +15,8 @@ class Database {
         $statement->execute($params);
         return $statement;
     }
+
+    public function lastInsertId() {
+        return $this->connection->lastInsertId();
+    }
 }

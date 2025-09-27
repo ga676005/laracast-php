@@ -4,7 +4,7 @@ $routes = require 'routes.php';
 const BASE_PATH = __DIR__ . '/';
 
 require BASE_PATH . 'helpers.php';
-require BASE_PATH . 'router.php';
+require BASE_PATH . 'Router.php';
 
 // Create router instance
 $router = new Router();

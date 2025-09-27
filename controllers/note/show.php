@@ -16,4 +16,4 @@ if (!$note) {
 $tempUserId = 1;
 isAuthorized($note['user_id'] === $tempUserId);
 
-require BASE_PATH . "views/note.view.php";
+require BASE_PATH . "views/note/show.view.php";

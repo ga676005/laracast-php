@@ -21,7 +21,7 @@ require(BASE_PATH . 'views/partials/banner.php');
         </ul>
 
         <p class="mt-4">
-            <a href="<?= Router::url('/notes/create') ?>" class="text-blue-600 hover:text-blue-800 underline transition-colors duration-200">Create Note</a>
+            <a href="<?= Router::url('/notes/create') ?>" class="btn btn-soft btn-primary btn-sm">Create Note</a>
         </p>
     </div>
 </main>

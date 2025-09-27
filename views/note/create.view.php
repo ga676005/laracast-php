@@ -10,7 +10,10 @@ require(BASE_PATH . 'views/partials/banner.php');
         <form method="post">
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Body</legend>
-                <textarea name="body" class="textarea h-24" placeholder="Enter your note here~"></textarea>
+                <textarea name="body" class="textarea h-24" placeholder="Enter your note here~"><?= isset($_POST['body']) ? htmlspecialchars($_POST['body']) : '' ?></textarea>
+                <?php if (isset($errors['body'])) : ?>
+                    <p class="text-red-500"><?= $errors['body'] ?></p>
+                <?php endif; ?>
             </fieldset>
             <button class="btn btn-soft btn-primary btn-sm mt-2">Create Note</button>
         </form>

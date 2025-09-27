@@ -7,4 +7,4 @@ $db = new Database($config['database'], 'root', '');
 
 $notes = $db->query("SELECT * FROM notes WHERE user_id = 1")->fetchAll();
 
-require BASE_PATH . "views/notes.view.php";
+require BASE_PATH . "views/note/index.view.php";
