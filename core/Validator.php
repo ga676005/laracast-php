@@ -1,25 +1,28 @@
-<?php 
+<?php
 
 namespace Core;
 
-class Validator {
+class Validator
+{
     private $errors = [];
 
-    public function validate($data, $rules) {
+    public function validate($data, $rules)
+    {
         $this->errors = [];
-        
+
         foreach ($rules as $field => $fieldRules) {
             $value = $data[$field] ?? null;
-            
+
             foreach ($fieldRules as $rule) {
                 $this->validateField($field, $value, $rule);
             }
         }
-        
+
         return empty($this->errors);
     }
 
-    private function validateField($field, $value, $rule) {
+    private function validateField($field, $value, $rule)
+    {
         $ruleParts = explode(':', $rule);
         $ruleName = $ruleParts[0];
         $ruleValue = $ruleParts[1] ?? null;
@@ -30,13 +33,13 @@ class Validator {
                     $this->errors[$field] = ucfirst($field) . ' cannot be empty';
                 }
                 break;
-                
+
             case 'max':
                 if (strlen($value) > $ruleValue) {
                     $this->errors[$field] = ucfirst($field) . " must be less than {$ruleValue} characters";
                 }
                 break;
-                
+
             case 'min':
                 if (strlen($value) < $ruleValue) {
                     $this->errors[$field] = ucfirst($field) . " must be at least {$ruleValue} characters";
@@ -51,15 +54,18 @@ class Validator {
         }
     }
 
-    public function errors() {
+    public function errors()
+    {
         return $this->errors;
     }
 
-    public function hasErrors() {
+    public function hasErrors()
+    {
         return !empty($this->errors);
     }
 
-    public function getError($field) {
+    public function getError($field)
+    {
         return $this->errors[$field] ?? null;
     }
 }

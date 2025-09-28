@@ -1,5 +1,6 @@
 <?php
 
+
 use Core\Response;
 use Core\Router;
 
@@ -9,14 +10,13 @@ function d($value)
     var_dump($value);
     echo "</pre>";
 }
-
 function dd($value)
 {
     d($value);
     die();
 }
 
-function isAuthorized($condition, $statusCode = Response::FORBIDDEN)
+function authorize($condition, $statusCode = Response::FORBIDDEN)
 {
     if (!$condition) {
         Router::push($statusCode);
@@ -24,10 +24,11 @@ function isAuthorized($condition, $statusCode = Response::FORBIDDEN)
     }
 }
 
-function requireFromBase($path)
+function requireFromBase($path, $variables = [])
 {
     $fullPath = BASE_PATH . $path;
     if (file_exists($fullPath)) {
+        extract($variables);
         return require $fullPath;
     } else {
         throw new Exception("File not found: {$fullPath}");
@@ -76,7 +77,7 @@ function setupClassAutoLoader()
                 return false;
             }
 
-            return false; 
+            return false;
         } catch (Exception $e) {
             // 記錄錯誤到日誌，但不暴露詳細資訊
             error_log("spl_autoload_register not found '{$class}': " . $e->getMessage());

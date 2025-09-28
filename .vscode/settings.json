@@ -1,0 +1,25 @@
+{
+    "editor.formatOnSave": true,
+    "[php]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "junstyle.php-cs-fixer"
+    },
+    "php-cs-fixer.executablePath": "C:/laragon/www/laracast-php/php-cs-fixer.phar",
+    "php-cs-fixer.allowRisky": false,
+    "php-cs-fixer.autoFixByBracket": false,
+    "php-cs-fixer.autoFixBySemicolon": false,
+    "php-cs-fixer.config": ".php-cs-fixer.php",
+    "php-cs-fixer.onsave": true,
+    "php-cs-fixer.formatHtml": false,
+    "php.validate.enable": true,
+    "php.suggest.basic": false,
+    "files.associations": {
+        "*.php": "php"
+    },
+    "html.format.wrapLineLength": 120,
+    "html.format.wrapAttributes": "preserve",
+    "html.format.wrapAttributesIndentSize": 4,
+    "emmet.includeLanguages": {
+        "php": "html"
+    }
+}
