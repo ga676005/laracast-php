@@ -1,9 +1,9 @@
 <?php 
 $banner_title = 'Notes';
 
-$config = require 'config.php';
+$config = requireFromBase('config.php');
 $db = new Database($config['database'], 'root', '');
 
 $notes = $db->query("SELECT * FROM notes WHERE user_id = 1")->fetchAll();
 
-require BASE_PATH . "views/note/index.view.php";
+requireFromView("note/index.view.php", ['banner_title' => $banner_title, 'notes' => $notes]);

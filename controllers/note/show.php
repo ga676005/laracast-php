@@ -1,7 +1,7 @@
 <?php 
 $banner_title = 'Note';
 
-$config = require 'config.php';
+$config = requireFromBase('config.php');
 $db = new Database($config['database'], 'root', '');
 
 $note = $db->query("SELECT * FROM notes WHERE note_id = ?", [$_GET['id']])->fetch();
@@ -13,4 +13,4 @@ if (!$note) {
 $tempUserId = 1;
 isAuthorized($note['user_id'] === $tempUserId);
 
-require BASE_PATH . "views/note/show.view.php";
+requireFromView("note/show.view.php", ['banner_title' => $banner_title, 'note' => $note]);

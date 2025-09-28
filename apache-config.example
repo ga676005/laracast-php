@@ -1,0 +1,43 @@
+define ROOT "C:/laragon/www/laracast-php/public"
+define SITE "laracast-php.test"
+
+<VirtualHost *:80> 
+    DocumentRoot "${ROOT}"
+    ServerName ${SITE}
+    ServerAlias *.${SITE}
+    <Directory "${ROOT}">
+		Options -Indexes
+        AllowOverride All
+        Require all granted
+    </Directory>
+	
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule ^ index.php [L]
+    </IfModule>
+</VirtualHost>
+
+<VirtualHost *:443>
+    DocumentRoot "${ROOT}"
+    ServerName ${SITE}
+    ServerAlias *.${SITE}
+    <Directory "${ROOT}">
+		Options -Indexes
+        AllowOverride All
+        Require all granted
+		
+		<IfModule mod_rewrite.c>
+			RewriteEngine On
+			RewriteCond %{REQUEST_FILENAME} !-f
+			RewriteCond %{REQUEST_FILENAME} !-d
+			RewriteRule ^ index.php [L]
+		</IfModule>
+    </Directory>
+
+    SSLEngine on
+    SSLCertificateFile      C:/laragon/etc/ssl/laragon.crt
+    SSLCertificateKeyFile   C:/laragon/etc/ssl/laragon.key
+ 
+</VirtualHost>

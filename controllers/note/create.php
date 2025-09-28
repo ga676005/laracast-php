@@ -1,7 +1,7 @@
 <?php 
 $banner_title = 'Create Note';
 
-$config = require 'config.php';
+$config = requireFromBase('config.php');
 $db = new Database($config['database'], 'root', '');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -22,4 +22,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-require BASE_PATH . "views/note/create.view.php";
+requireFromView("note/create.view.php", ['banner_title' => $banner_title]);

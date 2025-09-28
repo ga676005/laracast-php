@@ -1,6 +1,0 @@
-RewriteEngine On
-
-# Route ALL requests to index.php (let PHP handle everything)
-# QSA = "Query String Append" - Preserves any query parameters (?param=value)
-# L = "Last rule" - Stop processing more rewrite rules after this one matches
-RewriteRule ^(.*)$ index.php [QSA,L]

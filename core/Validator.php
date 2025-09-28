@@ -40,6 +40,12 @@ class Validator {
                     $this->errors[$field] = ucfirst($field) . " must be at least {$ruleValue} characters";
                 }
                 break;
+
+            case 'email':
+                if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                    $this->errors[$field] = ucfirst($field) . " must be a valid email address";
+                }
+                break;
         }
     }
 

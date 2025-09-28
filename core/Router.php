@@ -40,7 +40,7 @@ class Router {
         if (is_numeric($uri) && file_exists(BASE_PATH . 'views/' . $uri . '.view.php')) {
             // Check if the route is a status code and corresponding view file exists
             http_response_code($uri);
-            require BASE_PATH . 'views/' . $uri . '.view.php';
+            requireFromView($uri . '.view.php');
             exit; // Status codes should stop execution
         }
 
@@ -69,10 +69,10 @@ class Router {
         $router = $this;
         
         if (array_key_exists($routeKey, $this->routes)) {
-            require BASE_PATH . $this->routes[$routeKey];
+            requireFromBase($this->routes[$routeKey]);
         } else {
             http_response_code(404);
-            require BASE_PATH . 'views/404.view.php';
+            requireFromView('404.view.php');
         }
     }
 }

@@ -1,4 +1,4 @@
 <?php 
 $banner_title = 'About';
 
-require BASE_PATH . "views/about.view.php";
+requireFromView("about.view.php", ['banner_title' => $banner_title]);

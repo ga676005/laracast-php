@@ -65,3 +65,91 @@ associative array 裡的參數名可加可不加 ':'
 ```bash
 TIMESTAMP=$(date +%Y%m%d-%H%M%S) && 7z a -tzip "archive_$TIMESTAMP.zip" . -x\!.git
 ```
+
+
+## Apache 設定
+
+以下設定可以連到 https://laracast-php.test/
+```conf
+# 定義網站根目錄 (ROOT)，這裡指向 public 資料夾，避免外部直接存取敏感檔案
+define ROOT "C:/laragon/www/laracast-php/public"
+
+# 定義網站的主要網域名稱 (SITE)
+define SITE "laracast-php.test"
+
+
+# ------------------ HTTP (Port 80) 設定 ------------------
+<VirtualHost *:80> 
+    # 網站根目錄，Apache 會從這裡開始尋找要回應的檔案
+    DocumentRoot "${ROOT}"
+
+    # 主要的網域名稱
+    ServerName ${SITE}
+
+    # 可使用的別名網域，例如：sub.laracast-php.test
+    ServerAlias *.${SITE}
+
+    # 指定目錄的存取規則
+    <Directory "${ROOT}">
+        # 關閉目錄瀏覽，避免使用者看到檔案清單
+        Options -Indexes
+
+        # 允許使用 .htaccess 覆寫 Apache 設定
+        AllowOverride All
+
+        # 開放所有人存取這個目錄
+        Require all granted
+    </Directory>
+	
+    # 啟用網址改寫規則 (Rewrite)
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+
+        # 如果請求的目標不是實體檔案
+        RewriteCond %{REQUEST_FILENAME} !-f
+        # 且也不是實體資料夾
+        RewriteCond %{REQUEST_FILENAME} !-d
+
+        # 就把請求導向 index.php，交給 PHP 路由器處理
+        RewriteRule ^ index.php [L]
+    </IfModule>
+</VirtualHost>
+
+
+# ------------------ HTTPS (Port 443) 設定 ------------------
+<VirtualHost *:443>
+    # 網站根目錄
+    DocumentRoot "${ROOT}"
+
+    # 主要的網域名稱
+    ServerName ${SITE}
+
+    # 可使用的別名網域
+    ServerAlias *.${SITE}
+
+    # 指定目錄的存取規則
+    <Directory "${ROOT}">
+        Options -Indexes
+        AllowOverride All
+        Require all granted
+		
+        # 同樣的網址改寫規則，確保 HTTPS 也能使用 index.php 作為路由
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteRule ^ index.php [L]
+        </IfModule>
+    </Directory>
+
+    # 啟用 SSL
+    SSLEngine on
+
+    # SSL 憑證檔案
+    SSLCertificateFile      C:/laragon/etc/ssl/laragon.crt
+
+    # SSL 金鑰檔案
+    SSLCertificateKeyFile   C:/laragon/etc/ssl/laragon.key
+</VirtualHost>
+
+```
