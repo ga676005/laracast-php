@@ -1,5 +1,13 @@
 <?php 
 
+namespace Core;
+
+// 開頭的 \ 代表用 global namespace 找，也只在這邊找
+use \PDO;
+
+// 如果寫 use PDO; 就會先在目前的 namespace (例如上面的 Core) 找，找不到才用 global namespace 找
+
+
 class Database {
     public $connection;
 

@@ -1,4 +1,6 @@
 <?php
+
+use Core\Router;
 // Function to get the current page from the URI
 function getCurrentPage() {
     // Get the request URI and strip project directory 

@@ -1,4 +1,5 @@
 <?php 
+use Core\Router;
 require('partials/header.php'); 
 require('partials/nav.php'); 
 ?>

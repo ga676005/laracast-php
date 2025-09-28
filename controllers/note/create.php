@@ -1,4 +1,9 @@
 <?php 
+
+use Core\Database;
+use Core\Validator;
+use Core\Router;
+
 $banner_title = 'Create Note';
 
 $config = requireFromBase('config.php');

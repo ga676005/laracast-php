@@ -1,4 +1,8 @@
 <?php 
+
+use Core\Database;
+use Core\Response;
+
 $banner_title = 'Note';
 
 $config = requireFromBase('config.php');
