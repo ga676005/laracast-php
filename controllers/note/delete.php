@@ -1,11 +1,11 @@
 <?php
 
+use Core\App;
 use Core\Database;
 use Core\Response;
 use Core\Router;
 
-$config = requireFromBase('config.php');
-$db = new Database($config['database'], 'root', '');
+$db = App::resolve(Database::class);
 
 $tempUserId = 1;
 
@@ -20,7 +20,7 @@ if (!$noteId) {
 }
 
 // First check if the note exists and belongs to the user
-$note = $db->query("SELECT * FROM notes WHERE note_id = ?", [$noteId])->fetch();
+$note = $db->query('SELECT * FROM notes WHERE note_id = ?', [$noteId])->fetch();
 
 if (!$note) {
     $router->resolve(Response::NOT_FOUND);
@@ -30,8 +30,8 @@ if (!$note) {
 authorize($note['user_id'] === $tempUserId);
 
 // Delete the note
-$db->query("DELETE FROM notes WHERE note_id = ? AND user_id = ?", [$noteId, $tempUserId]);
+$db->query('DELETE FROM notes WHERE note_id = ? AND user_id = ?', [$noteId, $tempUserId]);
 
 // Redirect to notes list
-Router::push("/notes");
+Router::push('/notes');
 exit;

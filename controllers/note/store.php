@@ -1,13 +1,14 @@
 <?php
 
+use Core\App;
 use Core\Database;
 use Core\Router;
 use Core\Validator;
 
 $banner_title = 'Create Note';
 
-$config = requireFromBase('config.php');
-$db = new Database($config['database'], 'root', '');
+/** @var Database $db */
+$db = App::resolve(Database::class);
 
 $body = $_POST['body'];
 $validator = new Validator();

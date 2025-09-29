@@ -1,13 +1,13 @@
 <?php
 
+use Core\App;
 use Core\Database;
 use Core\Response;
-use Core\Router;
 
 $banner_title = 'Note';
 
-$config = requireFromBase('config.php');
-$db = new Database($config['database'], 'root', '');
+/** @var Database $db */
+$db = App::resolve(Database::class);
 
 $tempUserId = 1;
 

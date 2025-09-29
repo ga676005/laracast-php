@@ -6,6 +6,8 @@ const BASE_PATH = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 require BASE_PATH . 'core/helpers.php';
 setupClassAutoLoader();
 
+requireFromBase('bootstrap.php');
+
 // Import Core classes
 use Core\Router;
 

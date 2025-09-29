@@ -1,13 +1,13 @@
 <?php
 
+use Core\App;
 use Core\Database;
 use Core\Response;
-use Core\Router;
 
 $banner_title = 'Edit Note';
 
-$config = requireFromBase('config.php');
-$db = new Database($config['database'], 'root', '');
+/** @var Database $db */
+$db = App::resolve(Database::class);
 
 $tempUserId = 1;
 
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-$note = $db->query("SELECT * FROM notes WHERE note_id = ?", [$_GET['id']])->fetch();
+$note = $db->query('SELECT * FROM notes WHERE note_id = ?', [$_GET['id']])->fetch();
 
 if (!$note) {
     $router->resolve(Response::NOT_FOUND);
@@ -25,4 +25,4 @@ if (!$note) {
 
 authorize($note['user_id'] === $tempUserId);
 
-requireFromView("note/edit.view.php", ['banner_title' => $banner_title, 'note' => $note]);
+requireFromView('note/edit.view.php', ['banner_title' => $banner_title, 'note' => $note]);
