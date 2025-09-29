@@ -10,6 +10,10 @@ requireFromView('partials/banner.php', ['banner_title' => $banner_title]);
 
 <main>
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <a href="<?= Router::url('/notes') ?>"
+            class="text-blue-600 hover:text-blue-800 underline transition-colors duration-200">
+            Back to notes
+        </a>
         <form method="post"
             action="<?= Router::url('/notes') ?>">
             <fieldset class="fieldset">

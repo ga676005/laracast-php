@@ -17,15 +17,15 @@ requireFromView('partials/banner.php', ['banner_title' => $banner_title]);
         <h1><?= htmlspecialchars($note['body']) ?>
         </h1>
         <div class="mt-4 flex gap-2">
-            <a href="<?= Router::url('/note/edit?id='.$note['note_id']) ?>"
+            <a href="<?= Router::url('/note/edit?id=' . $note['note_id']) ?>"
                 class="btn btn-soft btn-primary btn-sm">
                 Edit Note
             </a>
             <form method="post"
-                action="<?= Router::url('/note?id='.$note['note_id']) ?>"
+                action="<?= Router::url('/note?id=' . $note['note_id']) ?>"
                 onsubmit="return confirm('Are you sure you want to delete this note?')">
                 <input type="hidden" name="_method" value="DELETE">
-                <button type="submit" class="btn btn-error btn-sm">Delete Note</button>
+                <button type="submit" class="btn btn-soft btn-error btn-sm">Delete Note</button>
             </form>
         </div>
     </div>
