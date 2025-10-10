@@ -5,18 +5,19 @@ define SITE "laracast-php.test"
     DocumentRoot "${ROOT}"
     ServerName ${SITE}
     ServerAlias *.${SITE}
+    
+    # Redirect all HTTP traffic to HTTPS
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    </IfModule>
+    
     <Directory "${ROOT}">
 		Options -Indexes
         AllowOverride All
         Require all granted
     </Directory>
-	
-    <IfModule mod_rewrite.c>
-        RewriteEngine On
-        RewriteCond %{REQUEST_FILENAME} !-f
-        RewriteCond %{REQUEST_FILENAME} !-d
-        RewriteRule ^ index.php [L]
-    </IfModule>
 </VirtualHost>
 
 <VirtualHost *:443>
