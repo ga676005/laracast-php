@@ -2,43 +2,91 @@
 
 namespace Core;
 
+use Core\Response;
+
 class Router
 {
     private $routes = [];
+    private $middleware = [];
+
+    public function middleware($middleware)
+    {
+        // Accept both string and array
+        $this->middleware = is_array($middleware) ? $middleware : [$middleware];
+
+        return $this; // Return $this for chaining
+    }
 
     public function get($uri, $controller)
     {
-        $this->addRoute('GET', $uri, $controller);
+        $this->addRoute('GET', $uri, $controller, $this->middleware);
+        $this->middleware = []; // Reset after use
+
+        return $this;
     }
 
     public function post($uri, $controller)
     {
-        $this->addRoute('POST', $uri, $controller);
+        $this->addRoute('POST', $uri, $controller, $this->middleware);
+        $this->middleware = []; // Reset after use
+
+        return $this;
     }
 
     public function put($uri, $controller)
     {
-        $this->addRoute('PUT', $uri, $controller);
+        $this->addRoute('PUT', $uri, $controller, $this->middleware);
+        $this->middleware = []; // Reset after use
+
+        return $this;
     }
 
     public function patch($uri, $controller)
     {
-        $this->addRoute('PATCH', $uri, $controller);
+        $this->addRoute('PATCH', $uri, $controller, $this->middleware);
+        $this->middleware = []; // Reset after use
+
+        return $this;
     }
 
     public function delete($uri, $controller)
     {
-        $this->addRoute('DELETE', $uri, $controller);
+        $this->addRoute('DELETE', $uri, $controller, $this->middleware);
+        $this->middleware = []; // Reset after use
+
+        return $this;
     }
 
-    private function addRoute($method, $uri, $controller)
+    private function addRoute($method, $uri, $controller, $middleware = [])
     {
-        $this->routes[$method][$uri] = $controller;
+        $this->routes[$method][$uri] = [
+            'controller' => $controller,
+            'middleware' => $middleware,
+        ];
     }
 
     private function getHttpMethod()
     {
         return strtoupper($_POST['_method'] ?? $_SERVER['REQUEST_METHOD']);
+    }
+
+    private function getMiddleware($middlewareName)
+    {
+        $middlewareMap = [
+            // Web authentication (session-based)
+            'session-auth' => \Core\Middleware\SessionAuthMiddleware::class,
+            'guest' => \Core\Middleware\GuestMiddleware::class,
+            'csrf' => \Core\Middleware\CsrfMiddleware::class,
+
+            // API authentication (token-based)
+            'api-auth' => \Core\Middleware\ApiAuthMiddleware::class,
+        ];
+
+        if (!isset($middlewareMap[$middlewareName])) {
+            throw new \Exception("Middleware '{$middlewareName}' not found");
+        }
+
+        return new $middlewareMap[$middlewareName]();
     }
 
     public static function push($uri)
@@ -52,7 +100,6 @@ class Router
         header('Location: ' . self::url($uri));
         exit;
     }
-
 
     public static function url($path = '')
     {
@@ -109,7 +156,40 @@ class Router
 
         // Check if route exists for the specific HTTP method
         if (isset($this->routes[$method]) && array_key_exists($routeKey, $this->routes[$method])) {
-            requireFromBase($this->routes[$method][$routeKey]);
+            $route = $this->routes[$method][$routeKey];
+
+            // Execute middleware in order
+            /** @var Middleware|null $middlewareChain */
+            $middlewareChain = null;
+            /** @var Middleware|null $previousMiddleware */
+            $previousMiddleware = null;
+
+            foreach ($route['middleware'] as $middlewareName) {
+                $middleware = $this->getMiddleware($middlewareName);
+
+                if ($middlewareChain === null) {
+                    $middlewareChain = $middleware;
+                } else {
+                    $previousMiddleware->setNext($middleware);
+                }
+
+                $previousMiddleware = $middleware;
+            }
+
+            // Execute middleware chain
+            if ($middlewareChain !== null) {
+                $response = $middlewareChain->handle();
+
+                // If middleware returned a redirect or error response, send it
+                if ($response->getStatusCode() !== Response::OK) {
+                    $response->send();
+
+                    return;
+                }
+            }
+
+            // Execute controller
+            requireFromBase($route['controller']);
         } else {
             http_response_code(404);
             requireFromView('404.view.php');

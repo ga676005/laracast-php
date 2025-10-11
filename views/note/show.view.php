@@ -24,6 +24,7 @@ requireFromView('partials/banner.php', ['banner_title' => $banner_title]);
             <form method="post"
                 action="<?= Router::url('/note?id=' . $note['note_id']) ?>"
                 onsubmit="return confirm('Are you sure you want to delete this note?')">
+                <input type="hidden" name="_token" value="<?= $csrfToken ?? '' ?>">
                 <input type="hidden" name="_method" value="DELETE">
                 <button type="submit" class="btn btn-soft btn-error btn-sm">Delete Note</button>
             </form>

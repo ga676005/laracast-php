@@ -1,19 +1,21 @@
 <?php
 
 use Core\Router;
+
 // Function to get the current page from the URI
-function getCurrentPage() {
-    // Get the request URI and strip project directory 
+function getCurrentPage()
+{
+    // Get the request URI and strip project directory
     $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-    
+
     // Remove project directory (same logic as router)
     $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
     $projectDir = $scriptDir === '/' ? '' : $scriptDir;
-    
+
     if ($projectDir && str_starts_with($uri, $projectDir)) {
         $uri = substr($uri, strlen($projectDir));
     }
-    
+
     // Convert URI to page name
     switch ($uri) {
         case '/':
@@ -29,18 +31,20 @@ function getCurrentPage() {
 }
 
 // Function to check if a page is active
-function isActivePage($pageName) {
+function isActivePage($pageName)
+{
     return getCurrentPage() === $pageName;
 }
 
 // Function to get CSS classes for navigation links
-function getNavClasses($pageName) {
-    $baseClasses = "rounded-md px-3 py-2 text-sm font-medium";
-    
+function getNavClasses($pageName)
+{
+    $baseClasses = 'rounded-md px-3 py-2 text-sm font-medium';
+
     if (isActivePage($pageName)) {
-        return $baseClasses . " bg-gray-900 text-white";
+        return $baseClasses . ' bg-gray-900 text-white';
     } else {
-        return $baseClasses . " text-gray-300 hover:bg-white/5 hover:text-white";
+        return $baseClasses . ' text-gray-300 hover:bg-white/5 hover:text-white';
     }
 }
 ?>
@@ -72,19 +76,27 @@ function getNavClasses($pageName) {
                     </button>
 
                     <!-- Profile dropdown -->
+                    <?php if (isset($_SESSION['user'])): ?>
                     <el-dropdown class="relative ml-3">
                         <button class="relative flex max-w-xs items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                             <span class="absolute -inset-1.5"></span>
                             <span class="sr-only">Open user menu</span>
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-8 rounded-full outline -outline-offset-1 outline-white/10" />
+                            <div class="size-8 rounded-full bg-white text-gray-800 flex items-center justify-center font-semibold text-sm outline -outline-offset-1 outline-white/10">
+                                <?= strtoupper(substr($_SESSION['user']['email'], 0, 1)) ?>
+                            </div>
                         </button>
 
                         <el-menu anchor="bottom end" popover class="w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline-1 outline-black/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in">
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Your profile</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Settings</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Sign out</a>
+                            <a href="<?= Router::url('/signout') ?>" class="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:outline-hidden">Sign out</a>
                         </el-menu>
                     </el-dropdown>
+                    <?php else: ?>
+                    <a href="<?= Router::url('/signin') ?>" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">
+                        Sign In
+                    </a>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="-mr-2 flex md:hidden">
@@ -111,13 +123,15 @@ function getNavClasses($pageName) {
             <a href="<?= Router::url('/contact') ?>" <?= isActivePage('contact') ? 'aria-current="page"' : '' ?> class="block <?= getNavClasses('contact') ?>">Contact</a>
         </div>
         <div class="border-t border-white/10 pt-4 pb-3">
+            <?php if (isset($_SESSION['user'])): ?>
             <div class="flex items-center px-5">
                 <div class="shrink-0">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10" />
+                    <div class="size-10 rounded-full bg-white text-gray-800 flex items-center justify-center font-semibold text-lg outline -outline-offset-1 outline-white/10">
+                        <?= strtoupper(substr($_SESSION['user']['email'], 0, 1)) ?>
+                    </div>
                 </div>
                 <div class="ml-3">
-                    <div class="text-base/5 font-medium text-white">Tom Cook</div>
-                    <div class="text-sm font-medium text-gray-400">tom@example.com</div>
+                    <div class="text-base/5 font-medium text-white"><?= $_SESSION['user']['email'] ?></div>
                 </div>
                 <button type="button" class="relative ml-auto shrink-0 rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
                     <span class="absolute -inset-1.5"></span>
@@ -130,8 +144,15 @@ function getNavClasses($pageName) {
             <div class="mt-3 space-y-1 px-2">
                 <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Your profile</a>
                 <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Settings</a>
-                <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Sign out</a>
+                <a href="<?= Router::url('/signout') ?>" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">Sign out</a>
             </div>
+            <?php else: ?>
+            <div class="px-5">
+                <a href="<?= Router::url('/signin') ?>" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-white/5 hover:text-white">
+                    Sign In
+                </a>
+            </div>
+            <?php endif; ?>
         </div>
     </el-disclosure>
 </nav>

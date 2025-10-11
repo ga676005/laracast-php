@@ -11,8 +11,6 @@ $banner_title = 'Edit Note';
 /** @var Database $db */
 $db = App::resolve(Database::class);
 
-$tempUserId = 1;
-
 // This controller only handles PATCH requests (routed by Router)
 
 // Get note_id from URL parameters
@@ -30,8 +28,8 @@ if (!$note) {
     $router->resolve(Response::NOT_FOUND);
 }
 
-// Check authorization
-authorize($note['user_id'] === $tempUserId);
+// Check authorization - user can only update their own notes
+authorize($note['user_id'] === $_SESSION['user']['user_id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && strtoupper($_POST['_method']) === 'PATCH') {
     $body = $_POST['body'];
@@ -55,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && strtoup
     $db->query('UPDATE notes SET body = ? WHERE note_id = ? AND user_id = ?', [
         $body,
         $noteId,
-        $tempUserId,
+        $_SESSION['user']['user_id'],
     ]);
 
     // Redirect to the updated note

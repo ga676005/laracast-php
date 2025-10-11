@@ -1,5 +1,8 @@
 <?php
 
-$banner_title = 'Create Note';
+use Core\Security;
 
-requireFromView('note/create.view.php', ['banner_title' => $banner_title]);
+$banner_title = 'Create Note';
+$csrfToken = Security::generateCsrfToken();
+
+requireFromView('note/create.view.php', ['banner_title' => $banner_title, 'csrfToken' => $csrfToken]);

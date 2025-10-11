@@ -15,6 +15,7 @@ requireFromView('partials/banner.php', ['banner_title' => $banner_title]);
 
         <form method="post"
             action="<?= Router::url('/note?id=' . $note['note_id']) ?>">
+            <input type="hidden" name="_token" value="<?= $csrfToken ?? '' ?>">
             <input type="hidden" name="_method" value="PATCH">
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Body</legend>

@@ -20,7 +20,10 @@ $isValid = $validator->validate(['body' => $body], [
 $errors = $validator->errors();
 
 if ($isValid) {
-    $db->query('INSERT INTO notes (body, user_id) VALUES (:body, :user_id)', ['body' => $body, 'user_id' => 1]);
+    $db->query('INSERT INTO notes (body, user_id) VALUES (:body, :user_id)', [
+        'body' => $body,
+        'user_id' => $_SESSION['user']['user_id'],
+    ]);
     $note_id = $db->lastInsertId();
     Router::push("/note?id={$note_id}");
     exit;

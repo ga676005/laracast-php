@@ -6,6 +6,12 @@ const BASE_PATH = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 require BASE_PATH . 'core/helpers.php';
 setupClassAutoLoader();
 
+// Now we can use Core classes
+use Core\Security;
+
+// Start secure session
+Security::startSecureSession();
+
 requireFromBase('bootstrap.php');
 
 // Import Core classes

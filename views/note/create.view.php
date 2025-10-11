@@ -16,6 +16,7 @@ requireFromView('partials/banner.php', ['banner_title' => $banner_title]);
         </a>
         <form method="post"
             action="<?= Router::url('/notes') ?>">
+            <input type="hidden" name="_token" value="<?= $csrfToken ?? '' ?>">
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Body</legend>
                 <textarea

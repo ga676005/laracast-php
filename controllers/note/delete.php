@@ -7,8 +7,6 @@ use Core\Router;
 
 $db = App::resolve(Database::class);
 
-$tempUserId = 1;
-
 // This controller only handles DELETE requests (routed by Router)
 
 // Get note_id from URL parameters or request body
@@ -26,11 +24,11 @@ if (!$note) {
     $router->resolve(Response::NOT_FOUND);
 }
 
-// Check authorization
-authorize($note['user_id'] === $tempUserId);
+// Check authorization - user can only delete their own notes
+authorize($note['user_id'] === $_SESSION['user']['user_id']);
 
 // Delete the note
-$db->query('DELETE FROM notes WHERE note_id = ? AND user_id = ?', [$noteId, $tempUserId]);
+$db->query('DELETE FROM notes WHERE note_id = ? AND user_id = ?', [$noteId, $_SESSION['user']['user_id']]);
 
 // Redirect to notes list
 Router::push('/notes');

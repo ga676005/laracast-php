@@ -116,3 +116,15 @@ define SITE "laracast-php.test"
  
 </VirtualHost>
 ```
+
+## Session
+需要 session_start() 才能使用 $_SESSION
+$_SESSION["name"] = "abc" 會把資料寫在用 sessionID 命名的檔案下，
+存在 server 上，然後會用 cookie 傳 sessionID
+之後瀏覽器會傳 cookie 到 server，server 就知道要用哪個 session
+
+看 session 的檔案存在哪
+```cmd
+php --info | find "session.save_path"
+session.save_path => C:/laragon/tmp => C:/laragon/tmp
+```
