@@ -42,11 +42,15 @@ if ($isValid) {
     // hash password securely
     $password = Security::hashPassword($password);
 
-    // create user
-    $db->query('INSERT INTO users (email, password) VALUES (:email, :password)', ['email' => $email, 'password' => $password]);
+    // create user with default 'user' role
+    $db->query('INSERT INTO users (email, password, role) VALUES (:email, :password, :role)', [
+        'email' => $email,
+        'password' => $password,
+        'role' => 'user',
+    ]);
 
     // Log successful registration
-    error_log("New user registered: {$email}");
+    logInfo('New user registered', ['email' => $email]);
 
     Router::push('/signin');
     exit;

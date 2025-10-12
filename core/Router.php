@@ -77,6 +77,7 @@ class Router
             'session-auth' => \Core\Middleware\SessionAuthMiddleware::class,
             'guest' => \Core\Middleware\GuestMiddleware::class,
             'csrf' => \Core\Middleware\CsrfMiddleware::class,
+            'admin' => \Core\Middleware\AdminMiddleware::class,
 
             // API authentication (token-based)
             'api-auth' => \Core\Middleware\ApiAuthMiddleware::class,

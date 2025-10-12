@@ -4,7 +4,11 @@
 const BASE_PATH = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 // 這裡的路徑只能用串的，不能用 requireFromBase 因為還沒執行到 helpers.php
 require BASE_PATH . 'core/helpers.php';
+
 setupClassAutoLoader();
+
+// Configure error logging to use our custom log file
+configureErrorLogging();
 
 // Now we can use Core classes
 use Core\Security;

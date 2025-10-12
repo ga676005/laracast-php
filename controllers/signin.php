@@ -52,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user'] = [
             'email' => $user['email'],
             'user_id' => $user['user_id'],
+            'role' => $user['role'] ?? 'user', // Default to 'user' role if not set
         ];
         $_SESSION['last_activity'] = time();
 
@@ -60,7 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Log failed login attempt
-    error_log("Failed login attempt for email: {$email} from IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+    logWarning('Failed login attempt', [
+        'email' => $email,
+        'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+    ]);
 
     $errors['error'] = 'Invalid email or password';
     $csrfToken = Security::generateCsrfToken();

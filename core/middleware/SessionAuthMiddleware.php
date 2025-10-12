@@ -16,7 +16,9 @@ class SessionAuthMiddleware extends Middleware
         // Validate session and user authentication
         if (!Security::validateSession()) {
             // Log the unauthorized access attempt
-            error_log('Unauthorized session access attempt from IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+            logWarning('Unauthorized session access attempt', [
+                'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            ]);
 
             // Clear any existing session data
             Security::destroySession();
