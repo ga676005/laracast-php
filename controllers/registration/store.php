@@ -24,7 +24,7 @@ $validator = new Validator();
 
 $isValid = $validator->validate(['email' => $email, 'password' => $password], [
     'email' => ['required', 'email'],
-    'password' => ['required', 'min:8', 'max:255'],
+    'password' => ['required', 'min:3', 'max:255'],
 ]);
 
 $errors = $validator->errors();
@@ -42,8 +42,12 @@ if ($isValid) {
     // hash password securely
     $password = Security::hashPassword($password);
 
+    // Extract name from email (part before @)
+    $name = explode('@', $email)[0];
+    
     // create user with default 'user' role
-    $db->query('INSERT INTO users (email, password, role) VALUES (:email, :password, :role)', [
+    $db->query('INSERT INTO users (name, email, password, role) VALUES (:name, :email, :password, :role)', [
+        'name' => $name,
         'email' => $email,
         'password' => $password,
         'role' => 'user',

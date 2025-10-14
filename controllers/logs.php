@@ -32,6 +32,7 @@ $logFile = getErrorLogPath();
             color: #ffffff;
             margin: 0;
             padding: 20px;
+            height: 100vh;
         }
         .log-container {
             background-color: #2d2d2d;
