@@ -4,6 +4,7 @@ use Core\App;
 use Core\Database;
 use Core\Router;
 use Core\Security;
+use Core\Session;
 use Core\Validator;
 
 /** @var Database $db */
@@ -11,7 +12,7 @@ $db = App::resolve(Database::class);
 
 // Validate CSRF token
 if (!Security::validateCsrfToken($_POST['_token'] ?? '')) {
-    flash('error', 'Invalid request. Please try again.');
+    Session::flash('error', 'Invalid request. Please try again.');
     Router::push('/signup');
     exit;
 }
@@ -32,8 +33,8 @@ if ($isValid) {
     // check if email already exists
     $user = $db->query('SELECT * FROM users WHERE email = :email', ['email' => $email])->fetch();
     if ($user) {
-        flash('errors', array_merge($errors, ['email' => 'Email already exists']));
-        flash('email', $email); // Preserve email for user convenience
+        Session::flash('errors', array_merge($errors, ['email' => 'Email already exists']));
+        Session::flash('email', $email); // Preserve email for user convenience
         Router::push('/signup');
         exit;
     }
@@ -58,8 +59,8 @@ if ($isValid) {
     Router::push('/signin');
     exit;
 } else {
-    flash('errors', $errors);
-    flash('email', $email); // Preserve email for user convenience
+    Session::flash('errors', $errors);
+    Session::flash('email', $email); // Preserve email for user convenience
     Router::push('/signup');
     exit;
 }

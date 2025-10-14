@@ -1,13 +1,14 @@
 <?php
 
 use Core\Security;
+use Core\Session;
 
 $banner_title = 'Sign up';
 $csrfToken = Security::generateCsrfToken();
 
 // Get flash messages for display
-$errors = flash('errors') ?? [];
-$oldEmail = flash('email') ?? '';
+$errors = Session::flash('errors') ?? [];
+$oldEmail = Session::flash('email') ?? '';
 
 requireFromView('registration/create.view.php', [
     'banner_title' => $banner_title, 

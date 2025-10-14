@@ -11,10 +11,10 @@ setupClassAutoLoader();
 configureErrorLogging();
 
 // Now we can use Core classes
-use Core\Security;
+use Core\Session;
 
 // Start secure session
-Security::startSecureSession();
+Session::start();
 
 requireFromBase('bootstrap.php');
 

@@ -4,6 +4,7 @@ namespace Core\Middleware;
 
 use Core\Middleware;
 use Core\Response;
+use Core\Session;
 
 class ApiAuthMiddleware extends Middleware
 {
@@ -62,7 +63,7 @@ class ApiAuthMiddleware extends Middleware
         ];
 
         if (isset($validTokens[$token])) {
-            $_SESSION['user'] = $validTokens[$token];
+            Session::setUser($validTokens[$token]);
         }
     }
 }

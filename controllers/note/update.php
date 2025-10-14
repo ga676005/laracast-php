@@ -4,6 +4,7 @@ use Core\App;
 use Core\Database;
 use Core\Response;
 use Core\Router;
+use Core\Session;
 use Core\Validator;
 
 $banner_title = 'Edit Note';
@@ -29,7 +30,8 @@ if (!$note) {
 }
 
 // Check authorization - user can only update their own notes
-authorize($note['user_id'] === $_SESSION['user']['user_id']);
+$user = Session::getUser();
+authorize($note['user_id'] === $user['user_id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && strtoupper($_POST['_method']) === 'PATCH') {
     $body = $_POST['body'];
@@ -43,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && strtoup
 
     // If validation failed, set flash messages and redirect to GET edit form
     if (!$isValid) {
-        flash('errors', $errors);
-        flash('body', $body); // Preserve user input
+        Session::flash('errors', $errors);
+        Session::flash('body', $body); // Preserve user input
         Router::push("/note/edit?id={$noteId}");
         exit;
     }
@@ -53,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && strtoup
     $db->query('UPDATE notes SET body = ? WHERE note_id = ? AND user_id = ?', [
         $body,
         $noteId,
-        $_SESSION['user']['user_id'],
+        $user['user_id'],
     ]);
 
     // Redirect to the updated note

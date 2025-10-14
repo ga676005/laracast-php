@@ -1,10 +1,10 @@
 <?php
 
-use Core\Security;
+use Core\Session;
 
 // Simple authentication check
-Security::startSecureSession();
-if (!isset($_SESSION['user'])) {
+Session::start();
+if (!Session::isLoggedIn()) {
     header('Location: /signin');
     exit;
 }

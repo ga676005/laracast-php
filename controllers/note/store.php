@@ -3,6 +3,7 @@
 use Core\App;
 use Core\Database;
 use Core\Router;
+use Core\Session;
 use Core\Validator;
 
 $banner_title = 'Create Note';
@@ -20,9 +21,10 @@ $isValid = $validator->validate(['body' => $body], [
 $errors = $validator->errors();
 
 if ($isValid) {
+    $user = Session::getUser();
     $db->query('INSERT INTO notes (body, user_id) VALUES (:body, :user_id)', [
         'body' => $body,
-        'user_id' => $_SESSION['user']['user_id'],
+        'user_id' => $user['user_id'],
     ]);
     $note_id = $db->lastInsertId();
     Router::push("/note?id={$note_id}");
@@ -30,7 +32,7 @@ if ($isValid) {
 }
 
 // If validation failed, set flash messages and redirect to GET create form
-flash('errors', $errors);
-flash('body', $body); // Preserve user input
+Session::flash('errors', $errors);
+Session::flash('body', $body); // Preserve user input
 Router::push('/notes/create');
 exit;

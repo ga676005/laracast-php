@@ -4,6 +4,7 @@ use Core\App;
 use Core\Database;
 use Core\Response;
 use Core\Security;
+use Core\Session;
 
 $banner_title = 'Edit Note';
 
@@ -23,13 +24,14 @@ if (!$note) {
 }
 
 // Check authorization - user can only edit their own notes
-authorize($note['user_id'] === $_SESSION['user']['user_id']);
+$user = Session::getUser();
+authorize($note['user_id'] === $user['user_id']);
 
 $csrfToken = Security::generateCsrfToken();
 
 // Get flash messages for display
-$errors = flash('errors') ?? [];
-$oldBody = flash('body') ?? '';
+$errors = Session::flash('errors') ?? [];
+$oldBody = Session::flash('body') ?? '';
 
 // Use flash data if available, otherwise use note data
 $bodyValue = $oldBody ?: $note['body'];

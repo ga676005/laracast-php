@@ -4,6 +4,7 @@ use Core\App;
 use Core\Database;
 use Core\Router;
 use Core\Security;
+use Core\Session;
 
 /** @var Database $db */
 $db = App::resolve(Database::class);
@@ -14,11 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     
     // Get flash messages for display
     $errors = [];
-    if (flashExists('error')) {
-        $errors['error'] = flash('error');
+    if (Session::flashExists('error')) {
+        $errors['error'] = Session::flash('error');
     }
-    if (flashExists('email')) {
-        $oldEmail = flash('email');
+    if (Session::flashExists('email')) {
+        $oldEmail = Session::flash('email');
     }
     
     requireFromView('signin.view.php', [
@@ -33,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate CSRF token
     if (!Security::validateCsrfToken($_POST['_token'] ?? '')) {
-        flash('error', 'Invalid request. Please try again.');
+        Session::flash('error', 'Invalid request. Please try again.');
         Router::push('/signin');
         exit;
     }
@@ -43,15 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate input
     if (empty($email) || empty($password)) {
-        flash('error', 'Email and password are required.');
-        flash('email', $email); // Preserve email for user convenience
+        Session::flash('error', 'Email and password are required.');
+        Session::flash('email', $email); // Preserve email for user convenience
         Router::push('/signin');
         exit;
     }
 
     if (!Security::validateEmail($email)) {
-        flash('error', 'Please enter a valid email address.');
-        flash('email', $email); // Preserve email for user convenience
+        Session::flash('error', 'Please enter a valid email address.');
+        Session::flash('email', $email); // Preserve email for user convenience
         Router::push('/signin');
         exit;
     }
@@ -60,14 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $db->query('SELECT * FROM users WHERE email = :email', ['email' => $email])->fetch();
     if ($user && Security::verifyPassword($password, $user['password'])) {
         // Regenerate session ID for security
-        Security::regenerateSessionId();
+        Session::regenerateId();
 
-        $_SESSION['user'] = [
+        Session::setUser([
             'email' => $user['email'],
             'user_id' => $user['user_id'],
             'role' => $user['role'] ?? 'user', // Default to 'user' role if not set
-        ];
-        $_SESSION['last_activity'] = time();
+        ]);
 
         Router::push('/home');
         exit;
@@ -79,8 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
     ]);
 
-    flash('error', 'Invalid email or password');
-    flash('email', $email); // Preserve email for user convenience
+    Session::flash('error', 'Invalid email or password');
+    Session::flash('email', $email); // Preserve email for user convenience
     Router::push('/signin');
     exit;
 }

@@ -3,6 +3,7 @@
 use Core\App;
 use Core\Database;
 use Core\Security;
+use Core\Session;
 
 /** @var Database $db */
 $db = App::resolve(Database::class);
@@ -48,10 +49,18 @@ function createNote($db)
         return;
     }
 
+    // Get current user
+    $user = Session::getUser();
+    if (!$user) {
+        http_response_code(401);
+        echo json_encode(['error' => 'User not authenticated']);
+        return;
+    }
+
     // Create note
     $db->query('INSERT INTO notes (body, user_id) VALUES (:body, :user_id)', [
         'body' => $body,
-        'user_id' => $_SESSION['user']['user_id'],
+        'user_id' => $user['user_id'],
     ]);
 
     $noteId = $db->lastInsertId();
@@ -62,7 +71,7 @@ function createNote($db)
         'data' => [
             'id' => $noteId,
             'body' => $body,
-            'user_id' => $_SESSION['user']['user_id'],
+            'user_id' => $user['user_id'],
         ],
     ]);
 }
@@ -89,7 +98,7 @@ function showApiDocs()
                     'data' => [
                         'id' => 123,
                         'body' => 'Note content here',
-                        'user_id' => $_SESSION['user']['user_id'] ?? 'current_user',
+                        'user_id' => 'current_user',
                     ],
                 ],
             ],

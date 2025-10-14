@@ -4,24 +4,24 @@ namespace Core\Middleware;
 
 use Core\Middleware;
 use Core\Response;
-use Core\Security;
+use Core\Session;
 
 class SessionAuthMiddleware extends Middleware
 {
     protected function process($request = null): Response
     {
         // Start secure session if not already started
-        Security::startSecureSession();
+        Session::start();
 
         // Validate session and user authentication
-        if (!Security::validateSession()) {
+        if (!Session::validate()) {
             // Log the unauthorized access attempt
             logWarning('Unauthorized session access attempt', [
                 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             ]);
 
             // Clear any existing session data
-            Security::destroySession();
+            Session::destroy();
 
             // Redirect to signin page
             return new Response('', Response::REDIRECT, ['Location' => '/signin']);

@@ -4,17 +4,17 @@ namespace Core\Middleware;
 
 use Core\Middleware;
 use Core\Response;
-use Core\Security;
+use Core\Session;
 
 class GuestMiddleware extends Middleware
 {
     protected function process($request = null): Response
     {
         // Start secure session if not already started
-        Security::startSecureSession();
+        Session::start();
 
         // Check if user is already authenticated
-        if (Security::validateSession()) {
+        if (Session::validate()) {
             // User is already logged in, redirect to home
             return new Response('', Response::REDIRECT, ['Location' => '/home']);
         }

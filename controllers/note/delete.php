@@ -4,6 +4,7 @@ use Core\App;
 use Core\Database;
 use Core\Response;
 use Core\Router;
+use Core\Session;
 
 $db = App::resolve(Database::class);
 
@@ -25,10 +26,11 @@ if (!$note) {
 }
 
 // Check authorization - user can only delete their own notes
-authorize($note['user_id'] === $_SESSION['user']['user_id']);
+$user = Session::getUser();
+authorize($note['user_id'] === $user['user_id']);
 
 // Delete the note
-$db->query('DELETE FROM notes WHERE note_id = ? AND user_id = ?', [$noteId, $_SESSION['user']['user_id']]);
+$db->query('DELETE FROM notes WHERE note_id = ? AND user_id = ?', [$noteId, $user['user_id']]);
 
 // Redirect to notes list
 Router::push('/notes');
