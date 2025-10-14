@@ -11,9 +11,8 @@ $db = App::resolve(Database::class);
 
 // Validate CSRF token
 if (!Security::validateCsrfToken($_POST['_token'] ?? '')) {
-    $errors['error'] = 'Invalid request. Please try again.';
-    $csrfToken = Security::generateCsrfToken();
-    requireFromView('registration/create.view.php', ['errors' => $errors, 'csrfToken' => $csrfToken]);
+    flash('error', 'Invalid request. Please try again.');
+    Router::push('/signup');
     exit;
 }
 
@@ -33,9 +32,9 @@ if ($isValid) {
     // check if email already exists
     $user = $db->query('SELECT * FROM users WHERE email = :email', ['email' => $email])->fetch();
     if ($user) {
-        $errors['email'] = 'Email already exists';
-        $csrfToken = Security::generateCsrfToken();
-        requireFromView('registration/create.view.php', ['errors' => $errors, 'csrfToken' => $csrfToken]);
+        flash('errors', array_merge($errors, ['email' => 'Email already exists']));
+        flash('email', $email); // Preserve email for user convenience
+        Router::push('/signup');
         exit;
     }
 
@@ -59,6 +58,8 @@ if ($isValid) {
     Router::push('/signin');
     exit;
 } else {
-    $csrfToken = Security::generateCsrfToken();
-    requireFromView('registration/create.view.php', ['errors' => $errors, 'csrfToken' => $csrfToken]);
+    flash('errors', $errors);
+    flash('email', $email); // Preserve email for user convenience
+    Router::push('/signup');
+    exit;
 }

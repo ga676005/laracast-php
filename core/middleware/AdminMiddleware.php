@@ -4,23 +4,24 @@ namespace Core\Middleware;
 
 use Core\Middleware;
 use Core\Response;
+use Core\Security;
 
 class AdminMiddleware extends Middleware
 {
     protected function process($request = null): Response
     {
         // Start secure session if not already started
-        \Core\Security::startSecureSession();
+        Security::startSecureSession();
 
         // Check if user is authenticated
-        if (!\Core\Security::validateSession()) {
+        if (!Security::validateSession()) {
             // Log the unauthorized access attempt
             logWarning('Unauthorized admin access attempt', [
                 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             ]);
 
             // Clear any existing session data
-            \Core\Security::destroySession();
+            Security::destroySession();
 
             // Redirect to signin page
             return new Response('', Response::REDIRECT, ['Location' => '/signin']);

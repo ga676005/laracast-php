@@ -41,11 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method']) && strtoup
 
     $errors = $validator->errors();
 
-    // If validation failed, show the edit form with errors
+    // If validation failed, set flash messages and redirect to GET edit form
     if (!$isValid) {
-        // 這裡雖然傳 'note' => $note，但因為我們在 edit.view.php 中優先抓 $note['body']
-        // 所以編輯錯誤的時候才不會跳回去 note 原本的 body，而是跟 post 一樣的 body
-        requireFromView('note/edit.view.php', ['banner_title' => $banner_title, 'note' => $note, 'errors' => $errors ?? []]);
+        flash('errors', $errors);
+        flash('body', $body); // Preserve user input
+        Router::push("/note/edit?id={$noteId}");
         exit;
     }
 

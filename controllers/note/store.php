@@ -29,5 +29,8 @@ if ($isValid) {
     exit;
 }
 
-// If validation failed, show the create form with errors
-requireFromView('note/create.view.php', ['banner_title' => $banner_title, 'errors' => $errors]);
+// If validation failed, set flash messages and redirect to GET create form
+flash('errors', $errors);
+flash('body', $body); // Preserve user input
+Router::push('/notes/create');
+exit;

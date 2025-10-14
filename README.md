@@ -8,14 +8,14 @@ https://www.youtube.com/watch?v=fw5ObX8P6as
 
 # local server
 入口檔要叫 index.php 才會自動抓  
-`php -S localhost:8080` 跑內建 server  
+`php -S localhost:8080` 可以用 php 跑內建 server  
 或是把專案放到 C:\laragon\www 底下，然後連線 localhost/[資料夾名]
 
 
 # PHP
 純 PHP 檔(沒有 html)，開頭也要有 <?php，但可以不用寫 ?>  
 php code 結尾必須有 ';'，例如 `echo "123";`  
-'+' 字串要用 '.'，例如 `echo "1" . "2" . "3"`  
+php 用 '.' 而不是 '+' 組合字串，例如 `echo "1" . "2" . "3"`  
 變數用 $ 定義，例如 `$name = "dodo"`  
 template string 外面要用雙引號""包，不能用單引號''，例如 `echo "Hi, $name";` ，`echo 'Hi, $name';` 這樣會變純字串    
      

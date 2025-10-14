@@ -27,4 +27,17 @@ authorize($note['user_id'] === $_SESSION['user']['user_id']);
 
 $csrfToken = Security::generateCsrfToken();
 
-requireFromView('note/edit.view.php', ['banner_title' => $banner_title, 'note' => $note, 'csrfToken' => $csrfToken]);
+// Get flash messages for display
+$errors = flash('errors') ?? [];
+$oldBody = flash('body') ?? '';
+
+// Use flash data if available, otherwise use note data
+$bodyValue = $oldBody ?: $note['body'];
+
+requireFromView('note/edit.view.php', [
+    'banner_title' => $banner_title, 
+    'note' => $note, 
+    'csrfToken' => $csrfToken,
+    'errors' => $errors,
+    'bodyValue' => $bodyValue
+]);

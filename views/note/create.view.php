@@ -23,7 +23,7 @@ requireFromView('partials/banner.php', ['banner_title' => $banner_title]);
                   name="body"
                   class="textarea h-24"
                   placeholder="Enter your note here~"
-                ><?= isset($_POST['body']) ? htmlspecialchars($_POST['body']) : '' ?></textarea>
+                ><?= htmlspecialchars($oldBody) ?></textarea>
                 <!-- ^^^ teaxarea > < 中間不能有空格，不然輸入框就會多那些空格 -->
 
 

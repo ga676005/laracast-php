@@ -171,3 +171,34 @@ function logDebug($message, $context = [])
 {
     return logMessage('DEBUG', $message, $context);
 }
+
+// Flash message functions for PRG pattern
+function flash($key, $value = null)
+{
+    // Ensure $_SESSION['_flash'] is always an array
+    if (!isset($_SESSION['_flash']) || !is_array($_SESSION['_flash'])) {
+        $_SESSION['_flash'] = [];
+    }
+    
+    if ($value === null) {
+        // Get and remove flash message
+        $message = $_SESSION['_flash'][$key] ?? null;
+        unset($_SESSION['_flash'][$key]);
+        return $message;
+    }
+    
+    // Set flash message
+    $_SESSION['_flash'][$key] = $value;
+}
+
+function flashExists($key)
+{
+    return isset($_SESSION['_flash']) && is_array($_SESSION['_flash']) && isset($_SESSION['_flash'][$key]);
+}
+
+function flashAll()
+{
+    $messages = $_SESSION['_flash'] ?? [];
+    $_SESSION['_flash'] = [];
+    return $messages;
+}

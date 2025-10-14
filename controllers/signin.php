@@ -11,7 +11,21 @@ $db = App::resolve(Database::class);
 // if request method is GET, show signin form
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $csrfToken = Security::generateCsrfToken();
-    requireFromView('signin.view.php', ['csrfToken' => $csrfToken]);
+    
+    // Get flash messages for display
+    $errors = [];
+    if (flashExists('error')) {
+        $errors['error'] = flash('error');
+    }
+    if (flashExists('email')) {
+        $oldEmail = flash('email');
+    }
+    
+    requireFromView('signin.view.php', [
+        'csrfToken' => $csrfToken,
+        'errors' => $errors,
+        'oldEmail' => $oldEmail ?? ''
+    ]);
     exit;
 }
 
@@ -19,9 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate CSRF token
     if (!Security::validateCsrfToken($_POST['_token'] ?? '')) {
-        $errors['error'] = 'Invalid request. Please try again.';
-        $csrfToken = Security::generateCsrfToken();
-        requireFromView('signin.view.php', ['errors' => $errors, 'csrfToken' => $csrfToken]);
+        flash('error', 'Invalid request. Please try again.');
+        Router::push('/signin');
         exit;
     }
 
@@ -30,16 +43,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate input
     if (empty($email) || empty($password)) {
-        $errors['error'] = 'Email and password are required.';
-        $csrfToken = Security::generateCsrfToken();
-        requireFromView('signin.view.php', ['errors' => $errors, 'csrfToken' => $csrfToken]);
+        flash('error', 'Email and password are required.');
+        flash('email', $email); // Preserve email for user convenience
+        Router::push('/signin');
         exit;
     }
 
     if (!Security::validateEmail($email)) {
-        $errors['error'] = 'Please enter a valid email address.';
-        $csrfToken = Security::generateCsrfToken();
-        requireFromView('signin.view.php', ['errors' => $errors, 'csrfToken' => $csrfToken]);
+        flash('error', 'Please enter a valid email address.');
+        flash('email', $email); // Preserve email for user convenience
+        Router::push('/signin');
         exit;
     }
 
@@ -66,8 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
     ]);
 
-    $errors['error'] = 'Invalid email or password';
-    $csrfToken = Security::generateCsrfToken();
-    requireFromView('signin.view.php', ['errors' => $errors, 'csrfToken' => $csrfToken]);
+    flash('error', 'Invalid email or password');
+    flash('email', $email); // Preserve email for user convenience
+    Router::push('/signin');
     exit;
 }
