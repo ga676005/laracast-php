@@ -23,8 +23,15 @@ class AdminMiddleware extends Middleware
             // Clear any existing session data
             Session::destroy();
 
+            // Build redirect URL with previous URL as query parameter (only for GET requests)
+            $redirectUrl = '/signin';
+            if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                $currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+                $redirectUrl .= '?previousurl=' . urlencode($currentUrl);
+            }
+
             // Redirect to signin page
-            return new Response('', Response::REDIRECT, ['Location' => '/signin']);
+            return new Response('', Response::REDIRECT, ['Location' => $redirectUrl]);
         }
 
         // Check if user has admin role

@@ -5,7 +5,14 @@ use Core\Session;
 // Simple authentication check
 Session::start();
 if (!Session::isLoggedIn()) {
-    header('Location: /signin');
+    // Build redirect URL with previous URL as query parameter (only for GET requests)
+    $redirectUrl = '/signin';
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $currentUrl = $_SERVER['REQUEST_URI'] ?? '/';
+        $redirectUrl .= '?previousurl=' . urlencode($currentUrl);
+    }
+    
+    header('Location: ' . $redirectUrl);
     exit;
 }
 

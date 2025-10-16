@@ -69,7 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'role' => $user['role'] ?? 'user', // Default to 'user' role if not set
         ]);
 
-        Router::push('/home');
+        // Redirect to previous URL or default to home
+        $redirectUrl = $_GET['previousurl'] ?? '/home';
+        
+        Router::push($redirectUrl);
         exit;
     }
 
