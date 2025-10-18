@@ -1,10 +1,12 @@
 <?php
 
+use Core\Log;
+
 // API authentication and admin middleware are handled by the router
 // No need for manual authentication checks here
 
 // Get log file path
-$logFile = getErrorLogPath();
+$logFile = Log::getErrorLogPath();
 
 // Get parameters
 $lastNewLogIndex = (int) ($_GET['last_new_log_index'] ?? 0);

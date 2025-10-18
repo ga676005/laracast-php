@@ -2,6 +2,7 @@
 
 namespace Core\Middleware;
 
+use Core\Log;
 use Core\Middleware;
 use Core\Response;
 use Core\Session;
@@ -16,7 +17,7 @@ class AdminMiddleware extends Middleware
         // Check if user is authenticated
         if (!Session::validate()) {
             // Log the unauthorized access attempt
-            logWarning('Unauthorized admin access attempt', [
+            Log::warning('Unauthorized admin access attempt', [
                 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             ]);
 
@@ -38,7 +39,7 @@ class AdminMiddleware extends Middleware
         $user = Session::getUser();
         if (!$user || $user['role'] !== 'admin') {
             // Log the unauthorized admin access attempt
-            logError('Non-admin user attempted to access admin area', [
+            Log::error('Non-admin user attempted to access admin area', [
                 'email' => $user['email'] ?? 'unknown',
                 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             ]);

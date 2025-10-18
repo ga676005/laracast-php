@@ -7,11 +7,12 @@ require BASE_PATH . 'core/helpers.php';
 
 setupClassAutoLoader();
 
-// Configure error logging to use our custom log file
-configureErrorLogging();
-
 // Now we can use Core classes
+use Core\Log;
 use Core\Session;
+
+// Configure error logging to use our custom log file
+Log::configureErrorLogging();
 
 // Start secure session
 Session::start();

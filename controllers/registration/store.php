@@ -2,6 +2,7 @@
 
 use Core\App;
 use Core\Database;
+use Core\Log;
 use Core\Router;
 use Core\Security;
 use Core\Session;
@@ -54,7 +55,7 @@ if ($isValid) {
     ]);
 
     // Log successful registration
-    logInfo('New user registered', ['email' => $email]);
+    Log::info('New user registered', ['email' => $email]);
 
     Router::push('/signin');
     exit;

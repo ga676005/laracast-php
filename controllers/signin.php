@@ -2,6 +2,7 @@
 
 use Core\App;
 use Core\Database;
+use Core\Log;
 use Core\Router;
 use Core\Security;
 use Core\Session;
@@ -77,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Log failed login attempt
-    logWarning('Failed login attempt', [
+    Log::warning('Failed login attempt', [
         'email' => $email,
         'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
     ]);

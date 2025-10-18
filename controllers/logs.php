@@ -1,5 +1,6 @@
 <?php
 
+use Core\Log;
 use Core\Session;
 
 // Simple authentication check
@@ -17,7 +18,7 @@ if (!Session::isLoggedIn()) {
 }
 
 // Get log file path for display purposes
-$logFile = getErrorLogPath();
+$logFile = Log::getErrorLogPath();
 
 ?>
 <!DOCTYPE html>

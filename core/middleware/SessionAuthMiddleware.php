@@ -2,6 +2,7 @@
 
 namespace Core\Middleware;
 
+use Core\Log;
 use Core\Middleware;
 use Core\Response;
 use Core\Session;
@@ -16,7 +17,7 @@ class SessionAuthMiddleware extends Middleware
         // Validate session and user authentication
         if (!Session::validate()) {
             // Log the unauthorized access attempt
-            logWarning('Unauthorized session access attempt', [
+            Log::warning('Unauthorized session access attempt', [
                 'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             ]);
 
