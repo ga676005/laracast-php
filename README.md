@@ -6,6 +6,14 @@ https://www.youtube.com/watch?v=fw5ObX8P6as
 
 把 PHP 例如 (C:\laragon\bin\php\php-8.4.5-nts-Win32-vs17-x64) 加到 path
 
+windows git bash 也要能用 php 的話，加一個 php.bat 到 php.exe 所在的資料夾
+php.bat
+```bash
+@echo off
+php.exe %*
+```
+
+
 # local server
 入口檔要叫 index.php 才會自動抓  
 `php -S localhost:8080` 可以用 php 跑內建 server  
