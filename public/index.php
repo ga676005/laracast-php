@@ -3,6 +3,7 @@
 // BASE_PATH 永遠都用入口檔，因為 index.php 放在 public，所以 BASE_PATH 要回到上一層
 const BASE_PATH = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
 // Load Composer autoloader，使用 composer.json 裡的 autoload
+// 有加東西就要重跑 php composer.phar dump-autoload
 require BASE_PATH . 'vendor/autoload.php';
 
 // Now we can use Core classes

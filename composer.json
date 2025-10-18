@@ -6,13 +6,24 @@
             "email": "ga676005@hotmial.com.tw"
         }
     ],
-    "require": {},
+    "require": {
+        "illuminate/collections": "^12.34"
+    },
     "autoload": {
         "psr-4": {
-            "Core\\": "core/"
+            "Core\\": "core/",
+            "Tests\\": "tests/"
         },
         "files": [
             "core/helpers.php"
         ]
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }
